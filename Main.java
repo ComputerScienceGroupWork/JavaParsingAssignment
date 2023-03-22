@@ -30,10 +30,13 @@ public class Main {
         char command = input.nextLine().charAt(0);
         switch(command){
             case '1':
+                enterGrade();
                 break;
             case '2':
+                printGrades();
                 break;
             case '3':
+                changeGrade();
                 break;
             case '4':
                 running = false;
@@ -44,7 +47,19 @@ public class Main {
                 input.nextLine();
         }
     }
+    public static void enterGrade()
+    {
 
+    }
+
+    public static void printGrades()
+    {
+
+    }
+    public static void changeGrade()
+    {
+        
+    }
     public static void clearScreen() {
         System.out.println("\033[H\033[2J");
         System.out.flush();

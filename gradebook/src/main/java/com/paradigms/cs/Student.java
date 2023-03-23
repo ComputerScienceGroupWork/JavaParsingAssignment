@@ -1,3 +1,4 @@
+package com.paradigms.cs;
 public class Student
 {
     public String name;

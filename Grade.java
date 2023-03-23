@@ -17,7 +17,8 @@ public class Grade {
         this.projects =projects;
         this.finalExam = finalExam;
     }
-
+  
+    //Overing the to string method [The intention is so that is can be used in the print grade]
     public String toString()
     {
         String s = "";

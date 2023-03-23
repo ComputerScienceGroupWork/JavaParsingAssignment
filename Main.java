@@ -121,13 +121,30 @@ public class Main {
     //printing all the grades
     public static void printGrades()
     {
+        System.out.println("Would you like to see? \n1)All the Results \n2)Results for one Student");
+        char ans = input.nextLine().charAt(0);
 
+        switch(ans){
+            case '1':
+                printAllGrades();
+            case '2':
+                printStudentGrade();
+            default:
+                System.out.println("Invalid input");
+                input.nextLine();
+        }
     }
 
-    //printing a single student
+    //printing a all student
+    public static void printAllGrades()
+    {
+       System.out.println(grades); 
+    }
+
+    //printing results for a single student
     public static void printStudentGrade()
     {
-
+        
     }
 
     //changing a grade

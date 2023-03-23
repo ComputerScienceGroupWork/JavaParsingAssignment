@@ -1,3 +1,12 @@
+/* This is the Gradebook Project which is going to be analyzed using the JavaParser
+ * In this project we have 3 classes
+ * The Student Class which is used to create a student 
+ * The Grade class which is used to create the grades and the main class
+ * It use Java ulility classes like ArrayList, Arrays etc
+ */
+
+
+ //Some comments are just here for us to understand the progress 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,6 +56,8 @@ public class Main {
                 input.nextLine();
         }
     }
+
+    //method for entering the grades
     public static void enterGrade()
     {
 
@@ -54,6 +65,7 @@ public class Main {
         System.out.println("#### Enter a students computer number ####");
         int compNum = input.nextInt();
         input.nextLine();
+
         // Fetch student
         Student student = null;
         for(Student s: students)
@@ -65,14 +77,17 @@ public class Main {
             }
         }
 
+        //If Student doesn't exist in the array, a new student created using the createStudent
         if(student == null)
         {
             System.out.println("Student not found!!!!");
             student = createStudent(compNum);
             System.out.println("Student Created");
         }
+
         System.out.println(Arrays.toString(students.toArray()));
         input.nextLine();
+
         //entering the grades
         ArrayList<Double> quizzes, tests , assignments, projects;
         quizzes = fetchResults("Quizzes");
@@ -82,14 +97,16 @@ public class Main {
         System.out.println("Enter final exam score");
         double fn = input.nextDouble();
         input.nextLine();
+
+        //creating and adding the grades to the grades list
         Grade grade = new Grade(student, "CSC 3301", quizzes, tests, assignments, projects, fn);
         grades.add(grade);
         System.out.println("Done!!");
-        // System.out.println(Arrays.toString(grades.toArray()));
         System.out.println(grade);
         input.nextLine();
     }
 
+    //gettting the grades for the activities [Note: The grades are gotten as strings since the total number of activities may vary e.g 5 quizzes and 2 tests] 
     public static ArrayList<Double> fetchResults(String prompt)
     {
         System.out.println("Enter the results for "+ prompt);
@@ -100,19 +117,43 @@ public class Main {
         }
         return res;
     }
+
+    //printing all the grades
     public static void printGrades()
     {
+        System.out.println("Would you like to see? \n1)All the Results \n2)Results for one Student");
+        char ans = input.nextLine().charAt(0);
 
+        switch(ans){
+            case '1':
+                printAllGrades();
+            case '2':
+                printStudentGrade();
+            default:
+                System.out.println("Invalid input");
+                input.nextLine();
+        }
     }
+
+    //printing a all student
+    public static void printAllGrades()
+    {
+       System.out.println(grades); 
+    }
+
+    //printing results for a single student
     public static void printStudentGrade()
     {
-
+        
     }
+
+    //changing a grade
     public static void changeGrade()
     {
         
     }
 
+    //creating a student using the Student class
     public static Student createStudent(int compNum)
     {   
         System.out.println("Enter the students name: ");
@@ -122,6 +163,7 @@ public class Main {
         return s;
 
     }
+
     public static void clearScreen() {
         System.out.println("\033[H\033[2J");
         System.out.flush();

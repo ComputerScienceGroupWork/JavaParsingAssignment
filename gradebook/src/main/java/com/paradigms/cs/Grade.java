@@ -19,6 +19,10 @@ public class Grade {
         this.finalExam = finalExam;
     }
 
+    public boolean forStudent(Student s)
+    {
+        return s == student;
+    }
     public String toString()
     {
         String s = "";

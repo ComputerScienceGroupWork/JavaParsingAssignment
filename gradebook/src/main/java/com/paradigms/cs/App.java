@@ -126,9 +126,12 @@ package com.paradigms.cs;
  
          switch(ans){
              case '1':
+                System.out.println("Printing Grades");
                  printAllGrades();
+                 input.nextLine();
                  break;
              case '2':
+             input.nextLine();
                  printStudentGrade();
                  break;
              default:

@@ -13,8 +13,8 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.*;
 import java.io.File;
-import java.io.FileWriter; 
- 
+import java.io.FileWriter;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,10 +22,10 @@ import java.util.Optional;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-// import java.util.HashMap;
-// import java.util.List;
-// import java.util.Map;
-// import java.util.Optional;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class ParsingClass {
     public static void main(String[] args) {
@@ -40,29 +40,30 @@ public class ParsingClass {
                     .parse(new FileInputStream(s + "App.java"));
             CompilationUnit compilationUnit = parseResult.getResult().orElse(null);
 
-            Optional<ClassOrInterfaceDeclaration> mainClass = compilationUnit.getClassByName("App");
-            compilationUnit.findAll(FieldDeclaration.class).stream().filter(f -> f.isPublic() && !f.isStatic()).forEach(
-                    f -> System.out.println("Check field at line " + f.getRange().map(r -> r.begin.line).orElse(-1)));
+            // Optional<ClassOrInterfaceDeclaration> mainClass = compilationUnit.getClassByName("App");
+            // compilationUnit.findAll(FieldDeclaration.class).stream().filter(f -> f.isPublic() && !f.isStatic()).forEach(
+            //         f -> System.out.println("Check field at line " + f.getRange().map(r -> r.begin.line).orElse(-1)));
 
             // System.out.println(mainClass);
             YamlPrinter printer = new YamlPrinter(true);
-            try{
-            File obj = new File(s + "ast.yml");
-            if (obj.createNewFile()) {
-                System.out.println("File created: " + obj.getName());
-            } else {
-                System.out.println("File already exists.");
+            try {
+                File obj = new File(s + "ast.yml");
+                if (obj.createNewFile()) {
+                    System.out.println("File created: " + obj.getName());
+                } else {
+                    System.out.println("File already exists.");
+                }
+
+                FileWriter myWriter = new FileWriter(s + "ast.yml");
+                // Writes this content into the specified file
+                myWriter.write(printer.output(compilationUnit));
+
+                // Closing is necessary to retrieve the resources allocated
+                myWriter.close();
+            } catch (IOException e) {
+
             }
-
-            FileWriter myWriter = new FileWriter(s+"ast.yml");
-            // Writes this content into the specified file
-           myWriter.write(printer.output(compilationUnit)); 
-            
-           // Closing is necessary to retrieve the resources allocated
-           myWriter.close(); 
-        }catch(IOException e){
-
-        }
+            countTokens();
             // System.out.println(printer.output(compilationUnit));
 
         } catch (FileNotFoundException e) {
@@ -70,86 +71,92 @@ public class ParsingClass {
 
         }
     }
-    /*
-     * public static void main(String[] args) {
-     * try {
-     * // Create a JavaParser object
-     * JavaParser javaParser = new JavaParser();
-     * Path currentRelativePath = Paths.get("");
-     * String s = currentRelativePath.toAbsolutePath().toString() +
-     * "\\gradebook\\src\\main\\java\\com\\paradigms\\cs\\";
-     * System.out.println("Current absolute path is: " + s);
-     * // Parse the Java source file
-     * ParseResult<CompilationUnit> parseResult = javaParser.parse(
-     * new FileInputStream(s+"App.java"));
-     * CompilationUnit compilationUnit = parseResult.getResult().orElse(null);
-     * 
-     * // Get a list of all the classes in the source file
-     * List<ClassOrInterfaceDeclaration> classes =
-     * compilationUnit.findAll(ClassOrInterfaceDeclaration.class);
-     * 
-     * // List<ClassOrInterfaceDeclaration> methods =
-     * compilationUnit.findAll(ClassOrInterfaceDeclaration.class);
-     * 
-     * // Print out the name of each class
-     * for (ClassOrInterfaceDeclaration cls : classes) {
-     * System.out.println("Class name: " + cls.getNameAsString());
-     * }
-     * 
-     * 
-     * for (ClassOrInterfaceDeclaration cls : classes) {
-     * // Get the node corresponding to the class
-     * Node classNode = (Node) cls;
-     * 
-     * // Generate an AST for the class
-     * Optional<Node> ast = classNode.getChildNodes().stream()
-     * .filter(node -> node instanceof TypeDeclaration)
-     * .findFirst();
-     * 
-     * if (ast.isPresent()) {
-     * Node classAst = ast.get();
-     * System.out.println("Class AST for " + cls.getNameAsString() + ":");
-     * System.out.println(classAst.toString());
-     * } else {
-     * System.out.println("No class AST found for " + cls.getNameAsString());
-     * }
-     * }
-     * 
-     * int totalTokens = 0;
-     * 
-     * for (JavaToken token : compilationUnit.getTokenRange().get()) {
-     * totalTokens++;
-     * }
-     * 
-     * System.out.println("Total number of tokens: " + totalTokens);
-     * 
-     * HashMap<JavaToken.Kind, Integer> tokenCount = new HashMap<>();
-     * 
-     * for (JavaToken token : compilationUnit.getTokenRange().get()) {
-     * JavaToken.Kind kind = JavaToken.Kind.valueOf(token.getKind());
-     * tokenCount.put(kind, tokenCount.getOrDefault(kind, 0) + 1);
-     * }
-     * 
-     * for (Map.Entry<JavaToken.Kind, Integer> entry : tokenCount.entrySet()) {
-     * String tokenName = entry.getKey().name();
-     * int tokenCounts = entry.getValue();
-     * System.out.println(tokenName + ": " + tokenCounts);
-     * }
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * } catch (FileNotFoundException e) {
-     * e.printStackTrace();
-     * }
-     * }
-     */
+
+    public static void countTokens() {
+        try {
+            // Create a JavaParser object
+            JavaParser javaParser = new JavaParser();
+            Path currentRelativePath = Paths.get("");
+            String s = currentRelativePath.toAbsolutePath().toString() +
+                    "\\gradebook\\src\\main\\java\\com\\paradigms\\cs\\";
+            System.out.println("Current absolute path is: " + s);
+            // Parse the Java source file
+            ParseResult<CompilationUnit> parseResult = javaParser.parse(
+                    new FileInputStream(s + "App.java"));
+            CompilationUnit compilationUnit = parseResult.getResult().orElse(null);
+
+            // Get a list of all the classes in the source file
+            List<ClassOrInterfaceDeclaration> classes = compilationUnit.findAll(ClassOrInterfaceDeclaration.class);
+
+            // List<ClassOrInterfaceDeclaration> methods =
+            compilationUnit.findAll(ClassOrInterfaceDeclaration.class);
+
+            // Print out the name of each class
+            for (ClassOrInterfaceDeclaration cls : classes) {
+                System.out.println("Class name: " + cls.getNameAsString());
+            }
+
+            for (ClassOrInterfaceDeclaration cls : classes) {
+                // Get the node corresponding to the class
+                Node classNode = (Node) cls;
+
+                // Generate an AST for the class
+                Optional<Node> ast = classNode.getChildNodes().stream()
+                        .filter(node -> node instanceof TypeDeclaration)
+                        .findFirst();
+
+                if (ast.isPresent()) {
+                    Node classAst = ast.get();
+                    System.out.println("Class AST for " + cls.getNameAsString() + ":");
+                    System.out.println(classAst.toString());
+                } else {
+                    System.out.println("No class AST found for " + cls.getNameAsString());
+                }
+            }
+
+            int totalTokens = 0;
+
+            for (JavaToken token : compilationUnit.getTokenRange().get()) {
+                totalTokens++;
+            }
+
+            System.out.println("Total number of tokens: " + totalTokens);
+
+            HashMap<JavaToken.Kind, Integer> tokenCount = new HashMap<>();
+
+            for (JavaToken token : compilationUnit.getTokenRange().get()) {
+                JavaToken.Kind kind = JavaToken.Kind.valueOf(token.getKind());
+                tokenCount.put(kind, tokenCount.getOrDefault(kind, 0) + 1);
+            }
+            try {
+                File obj = new File(s + "tokencount.txt");
+                if (obj.createNewFile()) {
+                    System.out.println("File created: " + obj.getName());
+                } else {
+                    System.out.println("File already exists.");
+                }
+
+                FileWriter myWriter = new FileWriter(s + "tokencount.txt");
+                myWriter.write("");
+                // Writes this content into the specified file
+                for (Map.Entry<JavaToken.Kind, Integer> entry : tokenCount.entrySet()) {
+                    String tokenName = entry.getKey().name();
+                    int tokenCounts = entry.getValue();
+                    String so = tokenName + ": " + tokenCounts + "\n";
+                    myWriter.append(so);
+                }
+             
+
+                // Closing is necessary to retrieve the resources allocated
+                myWriter.close();
+            } catch (IOException e) {
+
+            }
+     
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
